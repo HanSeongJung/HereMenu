@@ -7,3 +7,12 @@ button {
   overflow: visible;
   cursor: pointer;
 }
+
+ul,
+ol,
+li {
+  padding: 0;
+  margin: 0;
+  border: 0 none;
+  list-style: none;
+}
