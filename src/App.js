@@ -1,58 +1,48 @@
+import React, { useState } from "react";
 import "./App.css";
+import "./css/select.css";
 import StoreImage from "./components/StoreImage";
 import SubNavi from "./components/SubNavi";
 import NaviButton from "./components/NaviButton";
 import MenuList from "./components/MenuList";
 import MenuItem from "./components/MenuItem";
+import MENUS from "./constant/MENUS";
 
-const menus = [
-  {
-    name: "항정살 수육",
-    price: "21,000원",
-    imgSrc: "/image/menu/항정살수육.png",
-  },
-  {
-    name: "돼지고기 가지볶음",
-    price: "18,000원",
-    imgSrc: "/image/menu/돼지고기가지볶음.png",
-  },
-  {
-    name: "모듬 치킨",
-    price: "17,000원",
-    imgSrc: "/image/menu/모듬치킨.png",
-  },
-  {
-    name: "항정살 수육",
-    price: "21,000원",
-    imgSrc: "/image/menu/항정살수육.png",
-  },
-  {
-    name: "돼지고기 가지볶음",
-    price: "18,000원",
-    imgSrc: "/image/menu/돼지고기가지볶음.png",
-  },
-  {
-    name: "모듬 치킨",
-    price: "17,000원",
-    imgSrc: "/image/menu/모듬치킨.png",
-  },
-];
+const createMenuItem = (menuArr) => {
+  const menu = menuArr.map(({ name, price, imgSrc }, index) => {
+    return <MenuItem key={index} name={name} price={price} imgSrc={imgSrc} />;
+  });
+
+  return menu;
+};
 
 function App() {
+  let [menu, setMenu] = useState(createMenuItem(MENUS.mainMenu));
+  const menuClick = (e) => {
+    const target = e.target;
+    document.querySelectorAll(".active")[0].classList.remove("active");
+    target.classList.add("active");
+
+    let menuArr = [];
+    const value = target.innerHTML;
+
+    value === "주류"
+      ? (menuArr = createMenuItem(MENUS.alcohol))
+      : (menuArr = createMenuItem(MENUS.mainMenu));
+
+    setMenu(menuArr); //menu list setting
+  };
+
   return (
     <>
       <StoreImage />
       <SubNavi>
-        <NaviButton>메인 메뉴</NaviButton>
-        <NaviButton>주류</NaviButton>
+        <NaviButton onClick={menuClick} className="active">
+          메인 메뉴
+        </NaviButton>
+        <NaviButton onClick={menuClick}>주류</NaviButton>
       </SubNavi>
-      <MenuList>
-        {menus.map(({ name, price, imgSrc }, index) => {
-          return (
-            <MenuItem key={index} name={name} price={price} imgSrc={imgSrc} />
-          );
-        })}
-      </MenuList>
+      <MenuList>{menu}</MenuList>
     </>
   );
 }
